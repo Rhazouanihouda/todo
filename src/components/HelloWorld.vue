@@ -1,71 +1,120 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          Todo listhouda
-        </h1>
-
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="container" style="max-width: 600px">
+    <v-container>
+      <v-row class="text-center">
+        <v-col class="mb-4">
+          <h1 class="display-2 font-weight-bold mb-3">
+            todolist
+          </h1>
+          <!-- Input -->
+          <div class="d-flex">
+            <input
+              v-model="task"
+              type="text"
+              placeholder="Entrer la tâche"
+              class="form-control"
+            />
+            <button @click="submitTask" class=" btn rounded-0 blue">
+              Ajouter
+            </button>
+          </div>
+          <!-- Todo table -->
+          <table class="table table-hover mt-5">
+            <thead>
+              <tr>
+                <th scope="col">Tâche</th>
+                <th scope="col">Statut</th>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col" class="text-center">#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- A REVOIR -->
+              <tr v-for="(task, index) in tasks" :key="index">
+                <td>{{ task.name }}</td>
+                <td>
+                  <span class="pointer" @click="changeStatus(index)">{{
+                    task.status
+                  }}</span>
+                </td>
+                <td>
+                  <div class="text-center" @click="editTask(index)">
+                    <span class="fa fa-pen"></span>
+                  </div>
+                </td>
+                <td>
+                  <div class="text-center" @click="deleteTask(idex)">
+                    <span class="fa fa-trash"></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
+export default {
+  name: "HelloWorld",
 
-    data: () => ({
-      ecosystem: [
+  data() {
+    return {
+      task: "",
+      editedTask: null,
+      availableStatuses: ["À faire", "En cours", "Fait"],
+      tasks: [
         {
-          text: 'vuetify-loader',
-          href: 'https://github.com/vuetifyjs/vuetify-loader',
+          name: "Steal bananas from the supermarket.",
+          status: "À faire",
         },
         {
-          text: 'github',
-          href: 'https://github.com/vuetifyjs/vuetify',
+          name: "Eat 1 kg chocolate in 1 hour.",
+          status: "in-progress",
         },
         {
-          text: 'awesome-vuetify',
-          href: 'https://github.com/vuetifyjs/awesome-vuetify',
-        },
-      ],
-      importantLinks: [
-        {
-          text: 'Documentation',
-          href: 'https://vuetifyjs.com',
-        },
-        {
-          text: 'Chat',
-          href: 'https://community.vuetifyjs.com',
-        },
-        {
-          text: 'Made with Vuetify',
-          href: 'https://madewithvuejs.com/vuetify',
-        },
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/vuetifyjs',
-        },
-        {
-          text: 'Articles',
-          href: 'https://medium.com/vuetify',
+          name: "Create YouTube video.",
+          status: "finished",
         },
       ],
-      whatsNext: [
-        {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer',
-        },
-        {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/getting-started/pre-made-layouts',
-        },
-        {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-        },
-      ],
-    }),
-  }
+    };
+  },
+  methods: {
+    submitTask() {
+      if (this.task.length === 0) return;
+
+      if (this.editedTask == null) {
+        this.tasks.push({
+          name: this.task,
+          status: "À faire",
+        });
+      } else {
+        this.tasks[this.editedTask].name = this.task;
+        this.editedTask = null;
+      }
+
+      this.task = "";
+    },
+    deleteTask(index) {
+      this.tasks.splice(index, 1);
+    },
+    editTask(index) {
+      this.task = this.tasks[index].name;
+      this.editedTask = index;
+    },
+    changeStatus(index) {
+      let newIndex = this.availableStatuses.indexOf(this.tasks[index].status);
+      if (++newIndex > 2) newIndex = 0;
+      this.tasks[index].status = this.availableStatuses[newIndex];
+    },
+  },
+};
 </script>
+
+<style scped>
+.pointer {
+  cursor: pointer;
+}
+</style>
