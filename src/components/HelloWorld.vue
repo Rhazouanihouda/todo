@@ -33,9 +33,16 @@
               <tr v-for="(task, index) in tasks" :key="index">
                 <td>{{ task.name }}</td>
                 <td>
-                  <span class="pointer" @click="changeStatus(index)">{{
-                    task.status
-                  }}</span>
+                  <span
+                    class="pointer noselect"
+                    @click="changeStatus(index)"
+                    :class="{
+                      'text-danger': task.status === 'À faire',
+                      'text-warning': task.status === 'En cours',
+                      'text-success': task.status === 'Fait',
+                    }"
+                    >{{ task.status }}</span
+                  >
                 </td>
                 <td>
                   <div class="text-center" @click="editTask(index)">
