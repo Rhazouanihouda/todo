@@ -4,14 +4,15 @@
       <v-row class="text-center">
         <v-col class="mb-4">
           <h1 class="display-2 font-weight-bold mb-3">
-            todolist
+            TodoList
           </h1>
           <!-- Input -->
           <div class="d-flex">
             <input
-              v-model="task"
+              v-model="taskName"
               type="text"
               placeholder="Entrer la tâche"
+              name="task-entry"
               class="form-control"
             />
             <button @click="submitTask" class=" btn rounded-0 blue">
@@ -29,9 +30,17 @@
               </tr>
             </thead>
             <tbody>
-              <!-- A REVOIR -->
               <tr v-for="(task, index) in tasks" :key="index">
                 <td>{{ task.name }}</td>
+                <td>
+                  <input
+                    v-model="taskName"
+                    type="text"
+                    placeholder="Entrer la tâche"
+                    name="task-item"
+                    class="form-control"
+                  />
+                </td>
                 <td>
                   <span
                     class="pointer noselect"
@@ -50,7 +59,7 @@
                   </div>
                 </td>
                 <td>
-                  <div class="text-center" @click="deleteTask(idex)">
+                  <div class="text-center" @click="deleteTask(index)">
                     <span class="fa fa-trash"></span>
                   </div>
                 </td>
@@ -65,56 +74,43 @@
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: "TodoList",
 
   data() {
     return {
-      task: "",
+      taskName: "",
       editedTask: null,
-      availableStatuses: ["À faire", "En cours", "Fait"],
-      tasks: [
-        {
-          name: "Steal bananas from the supermarket.",
-          status: "À faire",
-        },
-        {
-          name: "Eat 1 kg chocolate in 1 hour.",
-          status: "in-progress",
-        },
-        {
-          name: "Create YouTube video.",
-          status: "finished",
-        },
-      ],
+      availableStatues: ["À faire", "En cours", "Fait"],
+      tasks: [],
     };
   },
   methods: {
     submitTask() {
-      if (this.task.length === 0) return;
+      if (this.taskName === "") return;
 
       if (this.editedTask == null) {
         this.tasks.push({
-          name: this.task,
+          name: this.taskName,
           status: "À faire",
         });
       } else {
-        this.tasks[this.editedTask].name = this.task;
+        this.tasks[this.editedTask].name = this.taskName;
         this.editedTask = null;
       }
 
-      this.task = "";
+      this.taskName = "";
     },
     deleteTask(index) {
       this.tasks.splice(index, 1);
     },
     editTask(index) {
-      this.task = this.tasks[index].name;
+      this.taskName = this.tasks[index].name;
       this.editedTask = index;
     },
     changeStatus(index) {
-      let newIndex = this.availableStatuses.indexOf(this.tasks[index].status);
+      let newIndex = this.availableStatues.indexOf(this.tasks[index].status);
       if (++newIndex > 2) newIndex = 0;
-      this.tasks[index].status = this.availableStatuses[newIndex];
+      this.tasks[index].status = this.availableStatues[newIndex];
     },
   },
 };
