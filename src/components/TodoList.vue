@@ -1,5 +1,5 @@
 <template>
-  <v-container style="max-width: 500px; margin-top: 200px; ">
+  <v-container style="max-width: 650px; margin-top: 200px; ">
     <v-alert outlined color="purple">
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
@@ -21,21 +21,28 @@
               <th scope="col">Tâche</th>
               <th scope="col">Statut</th>
               <th scope="col" class="text-center">Modifier</th>
+              <th
+                v-if="taskNameToUpdate !== null"
+                scope="col"
+                class="text-center"
+              >
+                Enregistrer
+              </th>
               <th scope="col" class="text-center">Supprimer</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(task, index) in tasks" :key="index">
-              <td>{{ task.name }}</td>
-              <!-- <td>
-                  <input
-                    v-model="taskName"
-                    type="text"
-                    placeholder="Entrer la tâche"
-                    name="task-item"
-                    class="form-control"
-                  />
-                </td> -->
+              <td v-if="editedTaskIndex !== null && editedTaskIndex === index">
+                <input
+                  v-model="taskNameToUpdate"
+                  type="text"
+                  placeholder="Entrer la nouvelle tâche à modifier"
+                  name="task-item"
+                  class="form-control"
+                />
+              </td>
+              <td v-else>{{ task.name }}</td>
               <td>
                 <span
                   class="pointer noselect"
@@ -50,11 +57,12 @@
               </td>
               <td>
                 <div class="text-center" @click="editTask(index)">
-                  <span
-                    class="fa fa-pen"
-                    color="#7986CB
-"
-                  ></span>
+                  <span class="fa fa-pen" color="#7986CB"></span>
+                </div>
+              </td>
+              <td v-if="taskNameToUpdate !== null">
+                <div class="text-center" @click="submitTask">
+                  <span class="fa fa-save" color="#7986CB"></span>
                 </div>
               </td>
               <td>
@@ -76,22 +84,27 @@ export default {
   data() {
     return {
       taskName: "",
-      editedTask: null,
+      taskNameToUpdate: null,
+      editedTaskIndex: null,
       availableStatues: ["À faire", "En cours", "Fait"],
       tasks: [],
     };
   },
   methods: {
     submitTask() {
-      if (this.taskName === "") return;
-      if (this.editedTask == null) {
+      if (this.editedTaskIndex == null) {
+        if (this.taskName === "") {
+          alert("Le nom de la tâche est vide! Entrez svp un nom valide.");
+          return;
+        }
         this.tasks.push({
           name: this.taskName,
           status: "À faire",
         });
       } else {
-        this.tasks[this.editedTask].name = this.taskName;
-        this.editedTask = null;
+        this.tasks[this.editedTaskIndex].name = this.taskNameToUpdate;
+        this.taskNameToUpdate = null;
+        this.editedTaskIndex = null;
       }
       this.taskName = "";
     },
@@ -99,8 +112,8 @@ export default {
       this.tasks.splice(index, 1);
     },
     editTask(index) {
-      this.taskName = this.tasks[index].name;
-      this.editedTask = index;
+      this.taskNameToUpdate = this.tasks[index].name;
+      this.editedTaskIndex = index;
     },
     changeStatus(index) {
       let newIndex = this.availableStatues.indexOf(this.tasks[index].status);
