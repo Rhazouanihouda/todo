@@ -1,72 +1,73 @@
 <template>
-  <div class="container" style="max-width: 600px">
-    <v-flex xs12 sm10 offset-sm>
-      <v-card color="#EDE7F6" rounded-lg>
-        <v-row class="text-center">
-          <v-col class="mb-4">
-            <h1 class="display-2 font-weight-bold mb-3">
-              TodoList
-            </h1>
-            <!-- Input -->
-            <v-text-field
-              v-model="taskName"
-              label="Entrer la tâche"
-              name="task-entry"
-              append-icon="mdi-plus"
-              @click:append="submitTask"
-            ></v-text-field>
-            <!-- Todo table -->
-            <table class="table table-hover mt-5">
-              <thead>
-                <tr>
-                  <th scope="col">Tâche</th>
-                  <th scope="col">Statut</th>
-                  <th scope="col" class="text-center">#</th>
-                  <th scope="col" class="text-center">#</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(task, index) in tasks" :key="index">
-                  <td>{{ task.name }}</td>
-                  <td>
-                    <input
-                      v-model="taskName"
-                      type="text"
-                      placeholder="Entrer la tâche"
-                      name="task-item"
-                      class="form-control"
-                    />
-                  </td>
-                  <td>
-                    <span
-                      class="pointer noselect"
-                      @click="changeStatus(index)"
-                      :class="{
-                        'text-danger': task.status === 'À faire',
-                        'text-warning': task.status === 'En cours',
-                        'text-success': task.status === 'Fait',
-                      }"
-                      >{{ task.status }}</span
-                    >
-                  </td>
-                  <td>
-                    <div class="text-center" @click="editTask(index)">
-                      <span class="fa fa-pen"></span>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-center" @click="deleteTask(index)">
-                      <span class="fa fa-trash"></span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-flex>
-  </div>
+  <v-container style="max-width: 500px; margin-top: 200px; ">
+    <v-alert outlined color="purple">
+      <v-col class="mb-4">
+        <h1 class="display-2 font-weight-bold mb-3">
+          TodoList
+        </h1>
+        <!-- Input -->
+        <v-text-field
+          color="#1B5E20"
+          v-model="taskName"
+          label="Entrer la tâche"
+          name="task-entry"
+          append-icon="mdi-plus"
+          @click:append="submitTask"
+        ></v-text-field>
+        <!-- Todo table -->
+        <table class="table table-hover mt-5">
+          <thead>
+            <tr>
+              <th scope="col">Tâche</th>
+              <th scope="col">Statut</th>
+              <th scope="col" class="text-center">Modifier</th>
+              <th scope="col" class="text-center">Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(task, index) in tasks" :key="index">
+              <td>{{ task.name }}</td>
+              <!-- <td>
+                  <input
+                    v-model="taskName"
+                    type="text"
+                    placeholder="Entrer la tâche"
+                    name="task-item"
+                    class="form-control"
+                  />
+                </td> -->
+              <td>
+                <span
+                  class="pointer noselect"
+                  @click="changeStatus(index)"
+                  :class="{
+                    'text-danger': task.status === 'À faire',
+                    'text-warning': task.status === 'En cours',
+                    'text-success': task.status === 'Fait',
+                  }"
+                  >{{ task.status }}</span
+                >
+              </td>
+              <td>
+                <div class="text-center" @click="editTask(index)">
+                  <span
+                    class="fa fa-pen"
+                    color="#7986CB
+"
+                  ></span>
+                </div>
+              </td>
+              <td>
+                <div class="text-center" @click="deleteTask(index)">
+                  <span class="fa fa-trash" color="#8D6E63"></span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </v-col>
+    </v-alert>
+  </v-container>
 </template>
 
 <script>
