@@ -1,10 +1,10 @@
 <template>
-  <v-container style="max-width: 650px; margin-top: 200px; ">
+  <v-container style="max-width: 700px; margin-top: 200px; ">
+    <h1 class="d-flex justify-space-around" style="color:#4A148C;">
+      To-do List
+    </h1>
     <v-alert outlined color="purple">
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">
-          TodoList
-        </h1>
         <!-- Input -->
         <v-text-field
           color="#1B5E20"
@@ -15,64 +15,64 @@
           @click:append="submitTask"
         ></v-text-field>
         <!-- Todo table -->
-        <table class="table table-hover mt-5">
-          <thead>
-            <tr>
-              <th scope="col">Tâche</th>
-              <th scope="col">Statut</th>
-              <th scope="col" class="text-center">Modifier</th>
-              <th
-                v-if="taskNameToUpdate !== null"
-                scope="col"
-                class="text-center"
-              >
-                Enregistrer
-              </th>
-              <th scope="col" class="text-center">Supprimer</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(task, index) in tasks" :key="index">
-              <td v-if="editedTaskIndex !== null && editedTaskIndex === index">
-                <input
-                  v-model="taskNameToUpdate"
-                  type="text"
-                  placeholder="Entrer la nouvelle tâche à modifier"
-                  name="task-item"
-                  class="form-control"
-                />
-              </td>
-              <td v-else>{{ task.name }}</td>
-              <td>
-                <span
-                  class="pointer noselect"
-                  @click="changeStatus(index)"
-                  :class="{
-                    'text-danger': task.status === 'À faire',
-                    'text-warning': task.status === 'En cours',
-                    'text-success': task.status === 'Fait',
-                  }"
-                  >{{ task.status }}</span
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Tâche</th>
+                <th class="text-left">Statut</th>
+                <th class="text-left">Modifier</th>
+                <th v-if="taskNameToUpdate !== null" class="text-left">
+                  Enregistrer
+                </th>
+                <th class="text-left">Supprimer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, index) in tasks" :key="index">
+                <td
+                  v-if="editedTaskIndex !== null && editedTaskIndex === index"
                 >
-              </td>
-              <td>
-                <div class="text-center" @click="editTask(index)">
-                  <span class="fa fa-pen" color="#7986CB"></span>
-                </div>
-              </td>
-              <td v-if="taskNameToUpdate !== null">
-                <div class="text-center" @click="submitTask">
-                  <span class="fa fa-save" color="#7986CB"></span>
-                </div>
-              </td>
-              <td>
-                <div class="text-center" @click="deleteTask(index)">
-                  <span class="fa fa-trash" color="#8D6E63"></span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <input
+                    v-model="taskNameToUpdate"
+                    type="text"
+                    placeholder="Entrer la nouvelle tâche à modifier"
+                    name="task-item"
+                    class="form-control"
+                  />
+                </td>
+                <td v-else>{{ task.name }}</td>
+                <td>
+                  <span
+                    class="pointer noselect"
+                    @click="changeStatus(index)"
+                    :class="{
+                      'error--text': task.status === 'À faire',
+                      'warning--text': task.status === 'En cours',
+                      'success--text': task.status === 'Fait',
+                    }"
+                    >{{ task.status }}</span
+                  >
+                </td>
+                <td>
+                  <div @click="editTask(index)">
+                    <span class="fa fa-pen" color="#7986CB"></span>
+                  </div>
+                </td>
+                <td v-if="taskNameToUpdate !== null">
+                  <div @click="submitTask">
+                    <span class="fa fa-save" color="#AFB42B"></span>
+                  </div>
+                </td>
+                <td>
+                  <div @click="deleteTask(index)">
+                    <span class="fa fa-trash" color="#8D6E63"></span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
       </v-col>
     </v-alert>
   </v-container>
