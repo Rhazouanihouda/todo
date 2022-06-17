@@ -48,9 +48,5 @@ export default {
   components: {
     TodoList,
   },
-
-  data: () => ({
-    //
-  }),
 };
 </script>

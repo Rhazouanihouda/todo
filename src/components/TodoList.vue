@@ -33,12 +33,11 @@
                 <td
                   v-if="editedTaskIndex !== null && editedTaskIndex === index"
                 >
-                  <input
+                  <v-text-field
                     v-model="taskNameToUpdate"
                     type="text"
                     placeholder="Entrer la nouvelle tâche à modifier"
                     name="task-item"
-                    class="form-control"
                   />
                 </td>
                 <td v-else>{{ task.name }}</td>
@@ -83,6 +82,7 @@ export default {
   name: "TodoList",
   data() {
     return {
+      // Variables
       taskName: "",
       taskNameToUpdate: null,
       editedTaskIndex: null,
@@ -91,6 +91,7 @@ export default {
     };
   },
   methods: {
+    // Add new task
     submitTask() {
       if (this.editedTaskIndex == null) {
         if (this.taskName === "") {
@@ -108,13 +109,16 @@ export default {
       }
       this.taskName = "";
     },
+    // Delete Task
     deleteTask(index) {
       this.tasks.splice(index, 1);
     },
+    // Edit task
     editTask(index) {
       this.taskNameToUpdate = this.tasks[index].name;
       this.editedTaskIndex = index;
     },
+    // Change task's status
     changeStatus(index) {
       let newIndex = this.availableStatues.indexOf(this.tasks[index].status);
       if (++newIndex > 2) newIndex = 0;
